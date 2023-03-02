@@ -1,0 +1,18 @@
+.pa-17 {
+  padding: 68px !important;
+}
+
+// .v-card {
+//   border-radius: 50% !important;
+// }
+
+.v-text-field--outlined.v-input--is-focused fieldset,
+.v-text-field--outlined.v-input--has-state fieldset {
+  border: 2px solid #000 !important;
+}
+
+.v-data-table {
+  th.text-start {
+    font-size: 1rem !important;
+  }
+}

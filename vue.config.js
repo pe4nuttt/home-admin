@@ -1,21 +1,20 @@
 module.exports = {
-  publicPath: process.env.NODE_ENV === 'production' ? '/vuetify-admin-template/' : '/',
+  publicPath:
+    process.env.NODE_ENV === "production" ? "/vuetify-admin-template/" : "/",
   devServer: {
-    disableHostCheck: true,
+    disableHostCheck: true
   },
-  transpileDependencies: [
-    'vuetify'
-  ],
+  transpileDependencies: ["vuetify"],
   runtimeCompiler: true,
-  configureWebpack:{
+  configureWebpack: {
     performance: {
       hints: false
     },
     optimization: {
       splitChunks: {
         minSize: 10000,
-        maxSize: 250000,
+        maxSize: 250000
       }
     }
-  },
-}
+  }
+};

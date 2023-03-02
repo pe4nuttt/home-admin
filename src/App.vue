@@ -5,8 +5,9 @@
 </template>
 
 <script>
-import '@/styles/overrides.sass'
+import "@/styles/overrides.scss";
+import "@/styles/styles.scss";
 export default {
-  name: 'App',
+  name: "App"
 };
 </script>

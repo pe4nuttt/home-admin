@@ -5,19 +5,17 @@
     </v-list-item-avatar>
     <v-list-item-content>
       <v-list-item-title class="text-h6">
-        GymCoding
+        Home Admin
       </v-list-item-title>
       <v-list-item-subtitle>
-        Vuetify v2.4.0
+        DHBKHN
       </v-list-item-subtitle>
     </v-list-item-content>
   </v-list-item>
 </template>
 <script>
 export default {
-  name: 'DefaultDrawerHeader'
-}
+  name: "DefaultDrawerHeader"
+};
 </script>
-<style lang="">
-
-</style>
+<style lang=""></style>

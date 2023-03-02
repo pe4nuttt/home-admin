@@ -1,17 +1,13 @@
 <template>
-  <v-main>
-    <v-container
-      fluid
-    >
+  <v-main class="content-wrapper">
+    <v-container fluid>
       <router-view />
     </v-container>
   </v-main>
 </template>
 <script>
 export default {
-  name: 'DefaultView'
-}
+  name: "DefaultView"
+};
 </script>
-<style lang="">
-
-</style>
+<style lang=""></style>

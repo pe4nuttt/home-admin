@@ -6,13 +6,8 @@
     :src="require('@/assets/sidebar.jpg')"
     app
   >
-    <template
-      #img="props"
-    >
-      <v-img
-        :gradient="gradient"
-        v-bind="props"
-      />
+    <template #img="props">
+      <v-img :gradient="gradient" v-bind="props" />
     </template>
 
     <default-drawer-header />
@@ -39,35 +34,35 @@
   </v-navigation-drawer>
 </template>
 <script>
-import { mapState, mapGetters, mapMutations } from 'vuex'
+import { mapState, mapGetters, mapMutations } from "vuex";
 export default {
-  name: 'DefaultDrawer',
+  name: "DefaultDrawer",
   components: {
-    DefaultDrawerHeader: () => import(
-      /* webpackChunkName: "default-drawer-header" */
-      './DrawerHeader'
-    ),
-    DefaultList: () => import(
-      /* webpackChunkName: "default-list" */
-      './List'
-    ),
+    DefaultDrawerHeader: () =>
+      import(
+        /* webpackChunkName: "default-drawer-header" */
+        "./DrawerHeader"
+      ),
+    DefaultList: () =>
+      import(
+        /* webpackChunkName: "default-list" */
+        "./List"
+      )
   },
   computed: {
-    ...mapState('app', {
-      gradient: 'gradient',
-      items: 'items',
+    ...mapState("app", {
+      gradient: "gradient",
+      items: "items"
     }),
     drawer: {
-      get () {
-        return this.$store.getters['app/getDrawer']
+      get() {
+        return this.$store.getters["app/getDrawer"];
       },
-      set (value) {
-        return this.$store.commit('app/setDrawer', value)
+      set(value) {
+        return this.$store.commit("app/setDrawer", value);
       }
-    },
+    }
   }
-}
+};
 </script>
-<style lang="">
-
-</style>
+<style lang=""></style>
