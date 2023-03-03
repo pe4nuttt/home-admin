@@ -49,8 +49,8 @@
                 @selected="handleSetPageSize"
               />
               <v-spacer></v-spacer>
-              <v-btn color="secondary" dark>
-                New User
+              <v-btn @click="isModal = true" color="secondary" dark>
+                Create Apartment
               </v-btn>
             </v-toolbar>
           </template>
@@ -62,6 +62,11 @@
         </v-data-table>
       </v-card-text>
     </v-card>
+    <apart-create-pop
+      :is-modal="isModal"
+      @save="onCreateApart"
+      @close="isModal = false"
+    />
   </v-container>
 </template>
 
@@ -69,12 +74,14 @@
 import AppTextField from "@/components/app/TextField";
 import BtnResetSearch from "@/components/app/BtnResetSearch";
 import PageCount from "@/components/app/PageCount";
-import { getUserApartList } from "@/api/userApartmentApi";
+import ApartCreatePop from "./components/ApartCreatePop";
+import { getApartments } from "@/api/apartmentApi.js";
 export default {
   components: {
     AppTextField,
     BtnResetSearch,
-    PageCount
+    PageCount,
+    ApartCreatePop
   },
   data() {
     return {
@@ -82,20 +89,24 @@ export default {
         {
           text: "No",
           align: "start",
-          value: "userId",
+          value: "id",
           sortable: false
         },
         {
-          text: "Name",
-          value: "userName"
+          text: "Apartment Name",
+          value: "apartmentName"
         },
         {
           text: "Apartment Code",
           value: "apartmentCode"
         },
         {
-          text: "Apartment",
-          value: "apartmentName"
+          text: "Address",
+          value: "address"
+        },
+        {
+          text: "Created At",
+          value: "creationTime"
         },
         {
           text: "Actions",
@@ -104,24 +115,20 @@ export default {
         }
       ],
       searchValues: {
-        search: null,
+        id: null,
+        apartmentCode: null,
         pageSize: 10,
-        pageNum: 1
+        pageNum: 1,
+        search: null
       },
       total: 1,
       records: 0,
-      dataList: []
+      dataList: [],
+      isModal: false
     };
   },
   mounted() {
     this.getList();
-    this.$toast("My toast content", {
-      timeout: 100000
-    });
-    this.$toast.info("Info toast");
-    this.$toast.success("Success toast");
-    this.$toast.error("Error toast");
-    this.$toast.warning("Warning toast");
   },
   methods: {
     handleSearch() {
@@ -140,24 +147,28 @@ export default {
     handleDeleteUser() {},
     async getList() {
       let params = {
-        Search: this.searchValues.search,
+        Id: this.searchValues.id,
         MaxResultCount: this.searchValues.pageSize,
-        SkipCount: (this.searchValues.pageNum - 1) * this.searchValues.pageSize
+        SkipCount: (this.searchValues.pageNum - 1) * this.searchValues.pageSize,
+        ApartmentCode: this.searchValues.apartmentCode
       };
       this.$store.commit("app/SET_LOADING", true);
 
-      await getUserApartList(params)
+      await getApartments(params)
         .then(res => {
           console.log(res.data);
           this.dataList = res.data.data;
           this.total = Math.ceil(
             res.data.totalRecords / this.searchValues.pageSize
           );
-          console.log(this.dataList);
         })
         .finally(() => {
           this.$store.commit("app/SET_LOADING", false);
         });
+    },
+    onCreateApart() {
+      this.isModal = false;
+      this.getList();
     }
   }
 };

@@ -12,7 +12,7 @@
 </template>
 <script>
 export default {
-  name: 'AppTextField',
+  name: "AppTextField",
   inheritAttrs: false,
   props: {
     dense: {
@@ -31,6 +31,11 @@ export default {
       type: String,
       default: null
     }
+  },
+  watch: {
+    value() {
+      console.log(this.value);
+    }
   }
-}
+};
 </script>

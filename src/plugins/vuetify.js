@@ -1,22 +1,23 @@
-import Vue from 'vue';
-import Vuetify from 'vuetify/lib/framework';
+import Vue from "vue";
+import Vuetify from "vuetify/lib/framework";
 
-import colors from 'vuetify/lib/util/colors'
+import colors from "vuetify/lib/util/colors";
 
 Vue.use(Vuetify);
 
 const theme = {
-  primary: colors.deepOrange,
-}
+  primary: colors.deepOrange
+  // primary: "#9155fd"
+};
 
 export default new Vuetify({
   breakpoint: {
-    mobileBreakpoint: 'sm'
+    mobileBreakpoint: "sm"
   },
   theme: {
     themes: {
       dark: theme,
-      light: theme,
-    },
-  },
+      light: theme
+    }
+  }
 });

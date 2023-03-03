@@ -25,9 +25,9 @@
           rounded
           large
           target="_blank"
-          href="https://www.youtube.com/channel/UCZ30aWiMw5C8mGcESlAGQbA/?sub_confirmation=1"
+          href="https://www.facebook.com/tanhng1512/"
         >
-          유튜브 짐코딩 채널
+          Download App
         </v-btn>
       </div>
     </template>
