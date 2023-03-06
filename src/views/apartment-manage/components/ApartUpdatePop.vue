@@ -3,7 +3,7 @@
     <v-dialog v-model="dialog" persistent max-width="600px">
       <v-card>
         <v-card-title>
-          <span class="text-h5">Create Apartment</span>
+          <span class="text-h5">Edit Apartment Detail</span>
         </v-card-title>
         <v-card-text>
           <v-container>
@@ -64,6 +64,15 @@
                       />
                     </validation-provider>
                   </v-col>
+                  <v-col cols="12">
+                    <v-text-field
+                      v-model="inputData.creationTime"
+                      label="Created At"
+                      outlined
+                      hide-details="auto"
+                      readonly
+                    />
+                  </v-col>
                 </v-row>
               </v-form>
             </validation-observer>
@@ -86,7 +95,16 @@
 <script>
 import { createOrUpdateApartment } from "@/api/apartmentApi.js";
 export default {
-  props: ["isModal"],
+  //   props: ["isModal", "detailData"],
+  props: {
+    isModal: Boolean,
+    detailData: {
+      type: Object,
+      default: () => {
+        return {};
+      }
+    }
+  },
   data() {
     return {
       dialog: false,
@@ -102,10 +120,14 @@ export default {
   watch: {
     isModal() {
       this.dialog = this.isModal;
+      this.inputData = Object.assign({}, this.detailData);
+      console.log(this.detailData);
     }
   },
   mounted() {
     this.dialog = this.isModal;
+    this.inputData = this.detailData;
+    console.log(this.detailData);
   },
   methods: {
     async fnSave() {
@@ -113,11 +135,16 @@ export default {
         if (res) {
           console.log(this.inputData);
           let params = { ...this.inputData, creationTime: new Date() };
+          this.$store.commit("app/SET_LOADING", true);
+
           await createOrUpdateApartment(params)
             .then(res => {
               this.$toast.success("Successfully");
+              this.$store.commit("app/SET_LOADING", false);
             })
-            .catch(err => {});
+            .catch(err => {
+              this.$store.commit("app/SET_LOADING", false);
+            });
           this.handleClose();
           this.$emit("save");
         } else {
@@ -130,13 +157,6 @@ export default {
       this.$emit("close");
     },
     handleClose() {
-      this.inputData = {
-        id: 0,
-        apartmentName: null,
-        apartmentCode: null,
-        address: null,
-        creationTime: null
-      };
       this.$refs.observer.reset();
     }
   }

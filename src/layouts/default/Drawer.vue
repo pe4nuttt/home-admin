@@ -15,22 +15,6 @@
     <v-divider />
 
     <default-list :items="items" />
-
-    <template #append>
-      <div class="pa-4 text-center">
-        <v-btn
-          block
-          class="font-weight-black"
-          color="red"
-          rounded
-          large
-          target="_blank"
-          href="https://www.facebook.com/tanhng1512/"
-        >
-          Download App
-        </v-btn>
-      </div>
-    </template>
   </v-navigation-drawer>
 </template>
 <script>

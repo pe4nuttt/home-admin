@@ -57,7 +57,12 @@ const state = {
         { title: "Verification Account", to: "/users/verification-account" }
       ]
     },
-    { title: "Apartments", icon: "mdi-home-outline", to: "/apartments" }
+    { title: "Apartments", icon: "mdi-home-outline", to: "/apartments" },
+    {
+      title: "Indoor Devices",
+      icon: "mdi-tablet-cellphone",
+      to: "/indoor-devices/list"
+    }
   ]
 };
 

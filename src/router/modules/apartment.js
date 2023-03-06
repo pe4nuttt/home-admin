@@ -13,7 +13,8 @@ export default {
     {
       path: "/apartments/:id",
       name: "ApartmentDetail",
-      component: () => import("@/views/apartment-manage/apartmentDetail")
+      component: () => import("@/views/apartment-manage/apartmentDetail"),
+      props: true
     }
   ]
 };

@@ -9,10 +9,16 @@ export default {
       name: "UserList",
       component: () => import("@/views/user-manage/userList")
     },
+
     {
       path: "/users/verification-account",
       name: "VerifyAccount",
       component: () => import("@/views/user-manage/verificationAccount")
+    },
+    {
+      path: "/users/user-detail/:id",
+      name: "UserDetail",
+      component: () => import("@/views/user-manage/userDetail")
     }
   ]
 };

@@ -5,15 +5,15 @@
         User Apartment
       </v-card-title>
       <v-card-text>
-        <v-form ref="form">
+        <v-form ref="form" @submit.prevent="handleSearch">
           <label>
-            Search
+            Apartment Code
             <v-text-field
-              v-model="searchValues.search"
+              v-model="searchValues.apartmentCode"
               class="mt-1"
               dense
               outlined
-              placeholder="Type name or apartment id"
+              placeholder="Type apartment code"
             />
           </label>
           <btn-reset-search @searchBtn="handleSearch" @resetBtn="handleReset" />
@@ -29,11 +29,14 @@
           hide-default-footer
           class="elevation-1"
         >
-          <!-- <template v-slot:item.no="{ item, index }">
-            <span>{{
-              index + 1 + searchValues.pageSize * (searchValues.pageNum - 1)
-            }}</span>
-          </template> -->
+          <template v-slot:item.state="{ item }">
+            <v-chip v-if="item.state == 0" class="ma-2" color="success">
+              Good
+            </v-chip>
+            <v-chip v-else-if="item.state == 1" class="ma-2" color="warning">
+              Bad
+            </v-chip>
+          </template>
           <template v-slot:item.actions="{ item }">
             <v-icon
               size="24"
@@ -41,15 +44,13 @@
               class="mr-2"
               @click="redirectDetail(item.id)"
             >
-              mdi-information-outline
+              mdi-check-circle-outline
             </v-icon>
             <v-icon size="24" color="red" @click="handleDeleteUser">
               mdi-delete-outline
             </v-icon>
           </template>
-          <template v-slot:item.creationTime="{ item }">
-            <span> {{ formatDate(item.creationTime) }} </span>
-          </template>
+
           <template v-slot:top>
             <v-toolbar flat>
               <page-count
@@ -58,7 +59,7 @@
               />
               <v-spacer></v-spacer>
               <v-btn @click="isModal = true" color="secondary" dark>
-                Create Apartment
+                Create Indoor Device
               </v-btn>
             </v-toolbar>
           </template>
@@ -74,11 +75,11 @@
         </v-data-table>
       </v-card-text>
     </v-card>
-    <apart-create-pop
+    <!-- <apart-create-pop
       :is-modal="isModal"
       @save="onCreateApart"
       @close="isModal = false"
-    />
+    /> -->
   </v-container>
 </template>
 
@@ -86,15 +87,15 @@
 import AppTextField from "@/components/app/TextField";
 import BtnResetSearch from "@/components/app/BtnResetSearch";
 import PageCount from "@/components/app/PageCount";
-import ApartCreatePop from "./components/ApartCreatePop";
-import { getApartments } from "@/api/apartmentApi.js";
+// import ApartCreatePop from "./components/ApartCreatePop";
+import { GetIndoorDevices } from "@/api/deviceApi.js";
 import { createListNo, formatDate } from "@/utils/format";
 export default {
   components: {
     AppTextField,
     BtnResetSearch,
-    PageCount,
-    ApartCreatePop
+    PageCount
+    // ApartCreatePop
   },
   data() {
     return {
@@ -107,20 +108,16 @@ export default {
           sortable: false
         },
         {
-          text: "Apartment Name",
-          value: "apartmentName"
+          text: "Device Name",
+          value: "name"
         },
         {
           text: "Apartment Code",
           value: "apartmentCode"
         },
         {
-          text: "Address",
-          value: "address"
-        },
-        {
-          text: "Created At",
-          value: "creationTime"
+          text: "Condition",
+          value: "state"
         },
         {
           text: "Actions",
@@ -132,8 +129,7 @@ export default {
         id: null,
         apartmentCode: null,
         pageSize: 10,
-        pageNum: 1,
-        search: null
+        pageNum: 1
       },
       total: 1,
       records: 0,
@@ -141,19 +137,8 @@ export default {
       isModal: false
     };
   },
-  // watch: {
-  //   dataList() {
-  //     this.dataList = this.dataList.map((item, index) => {
-  //       return {
-  //         ...item,
-  //         no: index + 1 + searchValues.pageSize * (searchValues.pageNum - 1)
-  //       };
-  //     });
-  //   }
-  // },
   mounted() {
     this.getList();
-    this.$toast.success("Successfully");
   },
 
   methods: {
@@ -162,7 +147,8 @@ export default {
     },
     handleReset() {
       this.searchValues = {
-        search: null,
+        id: null,
+        apartmentCode: null,
         pageSize: 10,
         pageNum: 1
       };
@@ -180,25 +166,15 @@ export default {
     handleDeleteUser() {},
     async getList() {
       let params = {
-        Id: this.searchValues?.id,
+        Id: this.searchValues.id,
         MaxResultCount: this.searchValues.pageSize,
         SkipCount: (this.searchValues.pageNum - 1) * this.searchValues.pageSize,
         ApartmentCode: this.searchValues.apartmentCode
       };
       this.$store.commit("app/SET_LOADING", true);
 
-      await getApartments(params)
+      await GetIndoorDevices(params)
         .then(res => {
-          console.log(res.data);
-          // this.dataList = res.data.data.map((item, index) => {
-          //   return {
-          //     ...item,
-          //     no:
-          //       index +
-          //       1 +
-          //       this.searchValues.pageSize * (this.searchValues.pageNum - 1)
-          //   };
-          // });
           this.dataList = createListNo(
             res.data.data,
             this.searchValues.pageSize,

@@ -40,18 +40,45 @@
           <template v-slot:item.actions="{ item }">
             <v-menu v-if="item.state != 2" offset-y>
               <template v-slot:activator="{ on, attrs }">
-                <v-icon
-                  size="20"
-                  class="mr-2 ml-4 pa-1"
-                  v-bind="on"
-                  v-on="on"
-                  @click="handleModifyUser"
-                >
+                <v-icon size="20" class="mr-2 ml-4 pa-1" v-bind="on" v-on="on">
                   mdi-dots-vertical
                 </v-icon>
               </template>
               <v-list>
-                <v-list-item></v-list-item>
+                <v-list-item-group v-if="item.state == 0">
+                  <v-list-item @click="handleAcceptForm(item.id)">
+                    <v-list-item-icon>
+                      <v-icon>mdi-check-circle-outline</v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-content>Accept</v-list-item-content>
+                  </v-list-item>
+                  <v-list-item @click="handleDenyForm(item.id)">
+                    <v-list-item-icon>
+                      <v-icon>mdi-close-circle-outline</v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-content>Deny</v-list-item-content>
+                  </v-list-item>
+                </v-list-item-group>
+                <v-list-item-group>
+                  <v-list-item
+                    v-if="item.state == 1 || item.state == 3"
+                    @click="redirectUserDetail(item.userId)"
+                  >
+                    <v-list-item-icon>
+                      <v-icon>mdi-information-outline</v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-content>Info</v-list-item-content>
+                  </v-list-item>
+                  <v-list-item
+                    v-if="item.state == 1"
+                    @click="handleDeletForm(item.id)"
+                  >
+                    <v-list-item-icon>
+                      <v-icon>mdi-delete-outline</v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-content>Delete</v-list-item-content>
+                  </v-list-item>
+                </v-list-item-group>
               </v-list>
             </v-menu>
           </template>
@@ -62,7 +89,7 @@
             <v-chip v-else-if="item.state == 1" class="ma-2" color="success">
               Accepted
             </v-chip>
-            <v-chip v-else-if="item.state == 2" class="ma-2" color="error">
+            <v-chip v-else-if="item.state == 3" class="ma-2" color="error">
               Denied
             </v-chip>
           </template>
@@ -93,7 +120,14 @@
 import AppTextField from "@/components/app/TextField";
 import BtnResetSearch from "@/components/app/BtnResetSearch";
 import PageCount from "@/components/app/PageCount";
-import { getVerifyUser, acceptVerify, denyVerify } from "@/api/verifyUserApi";
+import {
+  getVerifyUser,
+  acceptVerify,
+  denyVerify,
+  deleteVerifyUser
+} from "@/api/verifyUserApi";
+import { createListNo } from "@/utils/format";
+
 export default {
   components: {
     AppTextField,
@@ -106,7 +140,7 @@ export default {
         {
           text: "No",
           align: "start",
-          value: "userId",
+          value: "no",
           sortable: false
         },
         {
@@ -160,8 +194,6 @@ export default {
       this.getList();
     },
     handleSetPageSize() {},
-    handleModifyUser() {},
-    handleDeleteUser() {},
     async getList() {
       let params = {
         Search: this.searchValues.search,
@@ -173,7 +205,11 @@ export default {
       await getVerifyUser(params)
         .then(res => {
           console.log(res.data);
-          this.dataList = res.data.data;
+          this.dataList = createListNo(
+            res.data.data,
+            this.searchValues.pageSize,
+            this.searchValues.pageNum
+          );
           this.total = Math.ceil(
             res.data.totalRecords / this.searchValues.pageSize
           );
@@ -182,6 +218,36 @@ export default {
         .finally(() => {
           this.$store.commit("app/SET_LOADING", false);
         });
+    },
+    async handleAcceptForm(id) {
+      let bodyData = { formId: id };
+      await acceptVerify(bodyData).then(res => {
+        this.$toast.success("Accept Successfully");
+        this.getList();
+      });
+    },
+    async handleDenyForm(id) {
+      let bodyData = { formId: id };
+      await denyVerify(bodyData).then(res => {
+        this.$toast.success("Deny Successfully");
+        this.getList();
+      });
+    },
+    async handleDeletForm(id) {
+      let data = { id };
+      await deleteVerifyUser(data).then(res => {
+        this.$toast.success("Delete Successfully");
+        this.getList();
+      });
+    },
+    redirectUserDetail(userId) {
+      let route = this.$router.resolve({
+        name: "UserDetail",
+        params: {
+          id: userId
+        }
+      });
+      window.open(route.href, "_blank");
     }
   }
 };

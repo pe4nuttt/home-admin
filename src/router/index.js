@@ -2,6 +2,7 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import userRoutes from "@/router/modules/user.js";
 import apartmentRoutes from "@/router/modules/apartment.js";
+import indoorDeviceRoutes from "@/router/modules/indoorDevice.js";
 
 Vue.use(VueRouter);
 
@@ -113,6 +114,7 @@ const routes = [
   },
   userRoutes,
   apartmentRoutes,
+  indoorDeviceRoutes,
   {
     path: "/authentication",
     component: () =>

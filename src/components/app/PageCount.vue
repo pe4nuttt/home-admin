@@ -7,10 +7,9 @@
       v-model="pageCountNum"
       @change="onChangeValue"
     >
-      <option value="10" selected>10 items</option>
-      <option value="30">30 items</option>
-      <option value="50">50 items</option>
-      <option value="100">100 items</option>
+      <option v-for="(item, index) in valueList" :key="index" :value="item">
+        {{ item }} items
+      </option>
     </select>
   </div>
 </template>
@@ -20,7 +19,8 @@ export default {
   props: ["pageSize"],
   data() {
     return {
-      pageCountNum: 10
+      pageCountNum: 10,
+      valueList: [10, 30, 50, 100]
     };
   },
   mounted() {

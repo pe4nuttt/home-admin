@@ -36,7 +36,7 @@ extend('numeric', {
 })
 extend('required', {
   ...required,
-  message: '{_field_} 필드는 필수값 입니다.',
+  message: '{_field_} is required.',
 })
 extend('confirmed', {
   ...confirmed,

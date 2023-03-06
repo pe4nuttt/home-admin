@@ -3,7 +3,7 @@ import request from "@/utils/request.js";
 export function getUserApartList(data) {
   return request({
     url: "/UserApartment/AdminGetUserApartmentList",
-    methods: "get",
+    method: "get",
     params: data
   });
 }
@@ -11,7 +11,7 @@ export function getUserApartList(data) {
 export function getApartsOfUser(data) {
   return request({
     url: "/UserApartment/UserGetApartments",
-    methods: "get",
+    method: "get",
     params: data
   });
 }
@@ -19,7 +19,7 @@ export function getApartsOfUser(data) {
 export function getAnApartOfUser(data) {
   return request({
     url: "/UserApartment/UserGetAnApartment",
-    methods: "get",
+    method: "get",
     params: data
   });
 }
@@ -27,7 +27,7 @@ export function getAnApartOfUser(data) {
 export function deleteUserApartment(data) {
   return request({
     url: "/UserApartment/DeleteUserApartment",
-    methods: "get",
+    method: "delete",
     params: data
   });
 }

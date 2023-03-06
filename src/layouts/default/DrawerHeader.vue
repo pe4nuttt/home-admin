@@ -4,7 +4,7 @@
       <v-img :src="require('@/assets/logo-bg.png')" />
     </v-list-item-avatar>
     <v-list-item-content>
-      <v-list-item-title class="text-h6">
+      <v-list-item-title class="text-h6 app-title">
         Home Admin
       </v-list-item-title>
       <v-list-item-subtitle>

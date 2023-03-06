@@ -1,6 +1,6 @@
 import request from "@/utils/request.js";
 
-export function getVerifyUser(data) {
+export function getVerifyUser(data = {}) {
   return request({
     url: "VerifyUserForm/AdminGetVerifyUserForms",
     method: "get",
@@ -21,5 +21,12 @@ export function denyVerify(data) {
     url: "VerifyUserForm/AdminDenyVerifyForm",
     method: "post",
     data
+  });
+}
+
+export function deleteVerifyUser(data = {}) {
+  return request({
+    url: `VerifyUserForm/DeleteVerifyUserForm?id=${data.id}`,
+    method: "delete"
   });
 }
