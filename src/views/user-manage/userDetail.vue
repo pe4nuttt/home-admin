@@ -208,6 +208,11 @@ export default {
       await getUser({ AccountId: this.$route.params.id })
         .then(res => {
           this.userDetail = res.data.data;
+          this.userDetail = {
+            fullName: "Linh Do",
+            cccd: "123545245",
+            creationTime: new Date()
+          };
           this.userDetail.creationTime = formatDate(
             this.userDetail.creationTime
           );

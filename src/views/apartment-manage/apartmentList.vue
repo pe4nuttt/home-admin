@@ -2,7 +2,7 @@
   <v-container fluid>
     <v-card>
       <v-card-title>
-        User Apartment
+        Apartment List
       </v-card-title>
       <v-card-text>
         <v-form ref="form">
@@ -153,7 +153,6 @@ export default {
   // },
   mounted() {
     this.getList();
-    this.$toast.success("Successfully");
   },
 
   methods: {

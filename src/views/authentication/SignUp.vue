@@ -2,39 +2,30 @@
   <v-container class="fill-height">
     <v-row justify="center">
       <v-col cols="auto">
-        <router-link to="/">
+        <!-- <router-link to="/"> -->
           <v-img
             class="mx-auto mb-6"
             width="120"
-            :src="
-              require('@/assets/logo.png')"
+            :src="require('@/assets/logo.png')"
           />
-        </router-link>
-        <v-card
-          width="460"
-        >
+        <!-- </router-link> -->
+        <v-card width="460">
           <v-card-text class="text-center px-12 py-16">
-            <validation-observer
-              ref="observer"
-              v-slot="{ invalid }"
-            >
-              <v-form
-                ref="form"
-                @submit.prevent="signUp"
-              >
+            <validation-observer ref="observer" v-slot="{ invalid }">
+              <v-form ref="form" @submit.prevent="signUp">
                 <div class="text-h4 font-weight-black mb-10">
-                  회원가입
+                  Register
                 </div>
                 <validation-provider
                   v-slot="{ errors }"
-                  name="이메일"
+                  name="Username"
                   :rules="{
-                    required: true,
+                    required: true
                   }"
                 >
                   <v-text-field
-                    v-model="email"
-                    label="이메일"
+                    v-model="inputData.userName"
+                    label="Username"
                     clearable
                     prepend-icon="mdi-email"
                     :error-messages="errors"
@@ -42,34 +33,50 @@
                 </validation-provider>
                 <validation-provider
                   v-slot="{ errors }"
-                  name="비밀번호"
+                  name="Fullname"
                   :rules="{
-                    required: true,
+                    required: true
                   }"
                 >
                   <v-text-field
-                    v-model="password"
-                    label="비밀번호"
+                    v-model="inputData.fullName"
+                    label="Fullname"
                     clearable
-                    prepend-icon="mdi-lock-outline"
+                    prepend-icon="mdi-camera-account"
                     :error-messages="errors"
                   />
                 </validation-provider>
                 <validation-provider
                   v-slot="{ errors }"
-                  name="비밀번호 확인"
+                  name="Citizen Indentification"
                   :rules="{
-                    confirmed: '비밀번호',
+                    required: true
                   }"
                 >
                   <v-text-field
-                    v-model="passwordConfirm"
-                    label="비밀번호 확인"
+                    v-model="inputData.cccd"
+                    label="Citizen Indentification"
+                    clearable
+                    prepend-icon="mdi-card-account-details"
+                    :error-messages="errors"
+                  />
+                </validation-provider>
+                <validation-provider
+                  v-slot="{ errors }"
+                  name="Pasword"
+                  :rules="{
+                    required: true
+                  }"
+                >
+                  <v-text-field
+                    v-model="inputData.password"
+                    label="Pasword"
                     clearable
                     prepend-icon="mdi-lock-outline"
                     :error-messages="errors"
                   />
                 </validation-provider>
+
                 <v-btn
                   class="mt-6"
                   type="submit"
@@ -79,8 +86,17 @@
                   color="primary"
                   :disabled="invalid"
                 >
-                  가입하기
+                  Register
                 </v-btn>
+                <div class="mt-5">
+                  Have an account yet?
+                  <router-link
+                    class="text-decoration-none"
+                    to="/authentication/sign-in"
+                  >
+                    Login
+                  </router-link>
+                </div>
               </v-form>
             </validation-observer>
           </v-card-text>
@@ -91,22 +107,23 @@
 </template>
 <script>
 export default {
-  name: 'SignUp',
+  name: "SignUp",
   data: () => ({
-    email: null,
-    password: null,
-    passwordConfirm: null,
+    inputData: {
+      userName: null,
+      password: null,
+      fullName: null,
+      cccd: null
+    }
   }),
   methods: {
-    async signUp () {
-      const result = await this.$refs.observer.validate()
+    async signUp() {
+      const result = await this.$refs.observer.validate();
       if (result) {
-        alert('로그인 로직~')
+        console.log(this.inputData);
       }
     }
   }
-}
+};
 </script>
-<style lang="">
-
-</style>
+<style lang=""></style>

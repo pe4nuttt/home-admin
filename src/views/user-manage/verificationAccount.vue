@@ -177,9 +177,7 @@ export default {
   },
   mounted() {
     this.getList();
-    this.$toast("My toast content", {
-      timeout: 2000
-    });
+   
   },
   methods: {
     handleSearch() {

@@ -26,7 +26,7 @@ export function UpdateIndoorDevice(data) {
 
 export function DeleteIndoorDevice(data) {
   return request({
-    url: `/IndoorDevice/CreateOrUpdateIndoorDevice?id=${data.id}`,
+    url: `/IndoorDevice/DeleteIndoorDevice?id=${data.id}`,
     method: "delete"
   });
 }

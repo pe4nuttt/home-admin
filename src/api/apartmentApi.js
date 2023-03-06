@@ -1,6 +1,6 @@
 import request from "@/utils/request.js";
 
-export function getApartments(data) {
+export function getApartments(data = {}) {
   return request({
     url: "/Apartment/GetApartments",
     method: "get",

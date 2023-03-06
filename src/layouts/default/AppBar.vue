@@ -48,7 +48,7 @@
                 <v-icon>mdi-logout</v-icon>
               </v-list-item-icon>
               <v-list-item-content>
-                <v-list-item-title>Log out</v-list-item-title>
+                <v-list-item-title @click="fnLogout">Log out</v-list-item-title>
               </v-list-item-content>
             </v-list-item>
           </v-list-item-group>
@@ -78,6 +78,20 @@ export default {
       set(value) {
         return this.$store.commit("app/setDrawer", value);
       }
+    }
+  },
+  methods: {
+    async fnLogout() {
+      this.$store.commit("app/SET_LOADING", true);
+
+      await this.$store
+        .dispatch("auth/logout")
+        .then(res => {
+          this.$router.push({ name: "SignIn" });
+        })
+        .finally(() => {
+          this.$store.commit("app/SET_LOADING", false);
+        });
     }
   }
 };

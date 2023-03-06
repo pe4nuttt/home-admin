@@ -6,16 +6,33 @@
       </v-card-title>
       <v-card-text>
         <v-form ref="form" @submit.prevent="handleSearch">
-          <label>
-            Apartment Code
-            <v-text-field
-              v-model="searchValues.apartmentCode"
-              class="mt-1"
-              dense
-              outlined
-              placeholder="Type apartment code"
-            />
-          </label>
+          <v-row>
+            <v-col cols="12">
+              <label>
+                Apartment Code
+                <v-text-field
+                  v-model="searchValues.apartmentCode"
+                  class="mt-1"
+                  dense
+                  outlined
+                  placeholder="Type apartment code"
+                  hide-details
+                />
+              </label>
+            </v-col>
+            <!-- <v-col cols="12">
+              <label>
+                Apartment Code
+                <v-autocomplete
+                  v-model="searchValues.apartmentCode"
+                  :items="[]"
+                  class="mt-1"
+                  outlined
+                  dense
+                />
+              </label>
+            </v-col> -->
+          </v-row>
           <btn-reset-search @searchBtn="handleSearch" @resetBtn="handleReset" />
         </v-form>
       </v-card-text>
@@ -42,11 +59,11 @@
               size="24"
               color="blue"
               class="mr-2"
-              @click="redirectDetail(item.id)"
+              @click="showEditPop(item)"
             >
-              mdi-check-circle-outline
+              mdi-pencil-outline
             </v-icon>
-            <v-icon size="24" color="red" @click="handleDeleteUser">
+            <v-icon size="24" color="red" @click="handleDeleteDevice(item.id)">
               mdi-delete-outline
             </v-icon>
           </template>
@@ -58,7 +75,7 @@
                 @selected="handleSetPageSize"
               />
               <v-spacer></v-spacer>
-              <v-btn @click="isModal = true" color="secondary" dark>
+              <v-btn @click="isModal1 = true" color="secondary" dark>
                 Create Indoor Device
               </v-btn>
             </v-toolbar>
@@ -75,9 +92,20 @@
         </v-data-table>
       </v-card-text>
     </v-card>
+    <in-device-create-pop
+      :is-modal="isModal1"
+      @save="onCreateUpdateInDevice"
+      @close="isModal1 = false"
+    />
+    <in-device-update-pop
+      :is-modal="isModal2"
+      :detail-data="selectedRow"
+      @save="onCreateUpdateInDevice"
+      @close="isModal2 = false"
+    />
     <!-- <apart-create-pop
       :is-modal="isModal"
-      @save="onCreateApart"
+      @save="onCreateUpdateInDevice"
       @close="isModal = false"
     /> -->
   </v-container>
@@ -87,14 +115,17 @@
 import AppTextField from "@/components/app/TextField";
 import BtnResetSearch from "@/components/app/BtnResetSearch";
 import PageCount from "@/components/app/PageCount";
-// import ApartCreatePop from "./components/ApartCreatePop";
-import { GetIndoorDevices } from "@/api/deviceApi.js";
+import InDeviceCreatePop from "./components/InDeviceCreatePop";
+import InDeviceUpdatePop from "./components/InDeviceUpdatePop";
+import { GetIndoorDevices, DeleteIndoorDevice } from "@/api/deviceApi.js";
 import { createListNo, formatDate } from "@/utils/format";
 export default {
   components: {
     AppTextField,
     BtnResetSearch,
-    PageCount
+    PageCount,
+    InDeviceCreatePop,
+    InDeviceUpdatePop
     // ApartCreatePop
   },
   data() {
@@ -134,7 +165,9 @@ export default {
       total: 1,
       records: 0,
       dataList: [],
-      isModal: false
+      isModal1: false,
+      isModal2: false,
+      selectedRow: {}
     };
   },
   mounted() {
@@ -162,8 +195,6 @@ export default {
       this.searchValues.pageSize = value;
       this.getList();
     },
-    handleModifyUser() {},
-    handleDeleteUser() {},
     async getList() {
       let params = {
         Id: this.searchValues.id,
@@ -189,17 +220,31 @@ export default {
           this.$store.commit("app/SET_LOADING", false);
         });
     },
-    onCreateApart() {
-      this.isModal = false;
+    async handleDeleteDevice(id) {
+      this.$store.commit("app/SET_LOADING", true);
+
+      await DeleteIndoorDevice({ id })
+        .then(() => {
+          this.$toast.success("Successfully");
+          this.$store.commit("app/SET_LOADING", false);
+          this.getList();
+        })
+        .catch(err => {
+          this.$store.commit("app/SET_LOADING", false);
+        });
+    },
+    onCreateUpdateInDevice(value) {
+      if (value === 1) {
+        this.isModal1 = false;
+      } else if (value === 2) {
+        this.isModal2 = false;
+      }
       this.getList();
     },
-    redirectDetail(id) {
-      this.$router.push({
-        name: "ApartmentDetail",
-        params: {
-          id
-        }
-      });
+    showEditPop(data) {
+      console.log(data);
+      this.selectedRow = Object.assign({}, data);
+      this.isModal2 = true;
     }
   }
 };
