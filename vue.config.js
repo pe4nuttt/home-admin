@@ -1,6 +1,6 @@
 module.exports = {
   publicPath:
-    process.env.NODE_ENV === "production" ? "/vuetify-admin-template/" : "/",
+    process.env.NODE_ENV === "production" ? "/home-access-admin/" : "/",
   devServer: {
     disableHostCheck: true
   },
